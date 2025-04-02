@@ -105,5 +105,18 @@
             }
         });
     });
+
+    // Handle responsive content margin
+    function handleResponsiveLayout() {
+        if (window.innerWidth < 992) { // lg breakpoint
+            document.querySelector('.content').style.marginLeft = '0';
+        } else {
+            document.querySelector('.content').style.marginLeft = '350px';
+        }
+    }
+
+    // Call on load and resize
+    window.addEventListener('load', handleResponsiveLayout);
+    window.addEventListener('resize', handleResponsiveLayout);
 })(jQuery);
 
