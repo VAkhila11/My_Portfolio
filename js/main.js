@@ -27,11 +27,28 @@
     
     
     // Skills
-    $('.skill').waypoint(function () {
+    function initializeProgressBars() {
         $('.progress .progress-bar').each(function () {
-            $(this).css("width", $(this).attr("aria-valuenow") + '%');
+            $(this).css('width', '0');
+            const value = $(this).attr("aria-valuenow");
+            setTimeout(() => {
+                $(this).css({
+                    'width': value + '%',
+                    'transition': 'width 2s ease-in-out'
+                });
+            }, 100);
         });
-    }, {offset: '80%'});
+    }
+
+    // Initialize progress bars on page load
+    $(document).ready(function() {
+        setTimeout(initializeProgressBars, 500);
+    });
+
+    // Initialize progress bars when they come into view
+    $('.skill').waypoint(function () {
+        initializeProgressBars();
+    }, { offset: '80%', triggerOnce: true });
 
 
     // Portfolio isotope and filter
@@ -68,42 +85,6 @@
     $('.back-to-top').click(function () {
         $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
         return false;
-    });
-
-    // Contact form handling
-    $("#contactForm").on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var submitBtn = $('#sendMessageButton');
-        
-        submitBtn.prop('disabled', true);
-        
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            dataType: 'json',
-            success: function(response) {
-                $('#success').html("<div class='alert alert-success'>");
-                $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                    .append("</button>");
-                $('#success > .alert-success').append("<strong>Your message has been sent successfully!</strong>");
-                $('#success > .alert-success').append('</div>');
-                form.trigger("reset");
-            },
-            error: function() {
-                $('#success').html("<div class='alert alert-danger'>");
-                $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                    .append("</button>");
-                $('#success > .alert-danger').append($("<strong>").text("Sorry, it seems there was an error sending your message. Please try again later!"));
-                $('#success > .alert-danger').append('</div>');
-            },
-            complete: function() {
-                setTimeout(function() {
-                    submitBtn.prop('disabled', false);
-                }, 1000);
-            }
-        });
     });
 
     // Handle responsive content margin
